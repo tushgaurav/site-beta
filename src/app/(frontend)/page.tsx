@@ -4,7 +4,7 @@ import React from 'react'
 
 import config from '@/payload.config'
 import ArticlesSection from './_components/articles'
-import { Page } from '@/components/page'
+import { Page, PageTitle, Paragraph } from '@/components/page'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -12,9 +12,15 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
+  const homepage = await payload.findGlobal({
+    slug: 'homepage',
+    depth: 1,
+  })
+
   return (
     <Page>
-      <h1>Hello {user?.name}</h1>
+      <PageTitle>{homepage.heroTitle}</PageTitle>
+      <Paragraph>{homepage.bio}</Paragraph>
       <ArticlesSection />
     </Page>
   )
