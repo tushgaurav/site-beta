@@ -24,11 +24,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     <Page>
       <PageTitle>{article.title}</PageTitle>
 
-      <Paragraph className="mt-2 mb-10 max-w-[60ch] text-gray-400">{article.excerpt}</Paragraph>
+      <Paragraph className="mt-2 mb-10 max-w-[65ch] text-muted-foreground text-lg">
+        {article.excerpt}
+      </Paragraph>
 
-      <div className="prose">
+      <article className="max-w-[75ch]">
         <RichText data={article.content} />
-      </div>
+      </article>
     </Page>
   )
 }
