@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
@@ -111,10 +111,7 @@ export const Articles: CollectionConfig = {
       required: true,
       label: 'Article Content',
       editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [
-          ...defaultFeatures,
-          // Image upload is already included in default features!
-        ],
+        features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
       }),
     },
     {

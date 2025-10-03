@@ -1,6 +1,8 @@
 export function Page({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <main className={`p-4 px-8 w-full max-w-screen-xl mx-auto mb-10 ${className}`}>{children}</main>
+    <main className={`p-4 px-8 w-full max-w-screen-xl h-full mx-auto mb-10 ${className}`}>
+      {children}
+    </main>
   )
 }
 

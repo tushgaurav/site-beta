@@ -41,7 +41,7 @@ export default async function ArticlesSection() {
           return (
             <Link
               key={article.id}
-              href={`/articles/${article.slug}`}
+              href={`/article/${article.slug}`}
               className="bg-card rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
             >
               {imageUrl && (

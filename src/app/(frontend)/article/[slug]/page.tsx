@@ -22,9 +22,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <Page>
-      <PageTitle>RoboGPT Test</PageTitle>
+      <PageTitle>{article.title}</PageTitle>
 
-      <Paragraph>{article.excerpt}</Paragraph>
+      <Paragraph className="mt-2 mb-10 max-w-[60ch] text-gray-400">{article.excerpt}</Paragraph>
 
       <div className="prose">
         <RichText data={article.content} />
