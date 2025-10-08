@@ -5,8 +5,11 @@ import Navbar from '@/components/base/navbar'
 import Footer from '@/components/base/footer'
 
 export const metadata = {
+  title: {
+    default: 'Tushar Gaurav - Software Developer & Designer',
+    template: '%s | tushgaurav.com',
+  },
   description: 'Tushar Gaurav',
-  title: 'Tushar Gaurav',
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

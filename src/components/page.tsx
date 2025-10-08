@@ -6,8 +6,14 @@ export function Page({ children, className }: { children: React.ReactNode; class
   )
 }
 
-export function PageTitle({ children }: { children: React.ReactNode }) {
-  return <h1 className="text-4xl mt-4 font-semibold mb-4">{children}</h1>
+export function PageTitle({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return <h1 className={`text-4xl mt-4 font-semibold mb-4 ${className}`}>{children}</h1>
 }
 
 export function Paragraph({

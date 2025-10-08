@@ -22,6 +22,11 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      graphics: {
+        Logo: 'src/components/Logo.tsx#Logo',
+      },
+    },
   },
   collections: [Users, Media, Articles],
   globals: [homepage, about],

@@ -19,7 +19,7 @@ export default async function HomePage() {
 
   return (
     <Page>
-      <PageTitle>{homepage.heroTitle}</PageTitle>
+      <PageTitle className="mt-10">{homepage.heroTitle}</PageTitle>
       <Paragraph className="mt-2 mb-10 max-w-[60ch] text-gray-400">{homepage.bio}</Paragraph>
       <ArticlesSection />
     </Page>
