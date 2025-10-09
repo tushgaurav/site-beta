@@ -7,6 +7,7 @@ import MoreArticles from './_components/more-articles'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import ShareThis from './_components/share-this'
+import { Separator } from '@/components/ui/separator'
 
 export async function generateMetadata({
   params,
@@ -93,6 +94,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <ShareThis />
         </aside>
       </div>
+
+      <Separator className="my-4" />
     </Page>
   )
 }
