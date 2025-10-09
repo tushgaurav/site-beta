@@ -10,11 +10,7 @@ import {
 
 export const paragraphConverter: JSXConverters<SerializedParagraphNode> = {
   paragraph: ({ nodesToJSX, node }) => {
-    return (
-      <p className="mb-6 leading-relaxed text-foreground/90">
-        {nodesToJSX({ nodes: node.children })}
-      </p>
-    )
+    return <p className="mb-6">{nodesToJSX({ nodes: node.children })}</p>
   },
 }
 
@@ -22,29 +18,21 @@ export const listConverter: JSXConverters<SerializedListNode | SerializedListIte
   list: ({ node, nodesToJSX }) => {
     const Tag = node.listType === 'bullet' ? 'ul' : 'ol'
     return (
-      <Tag
-        className={`mb-6 space-y-2 ${node.listType === 'bullet' ? 'list-disc' : 'list-decimal'} pl-6 marker:text-muted-foreground`}
-      >
+      <Tag className={`${node.listType === 'bullet' ? 'list-disc' : 'list-decimal'} pl-6`}>
         {nodesToJSX({ nodes: node.children })}
       </Tag>
     )
   },
   listitem: ({ node, nodesToJSX }) => {
-    return (
-      <li className="leading-relaxed text-foreground/90 pl-2">
-        {nodesToJSX({ nodes: node.children })}
-      </li>
-    )
+    return <li className="pl-2">{nodesToJSX({ nodes: node.children })}</li>
   },
 }
 
 export const codeConverter: JSXConverters<SerializedBlockNode> = {
   code: ({ node, nodesToJSX }) => {
     return (
-      <pre className="mb-6 overflow-x-auto rounded-lg bg-muted p-4 border border-border">
-        <code className="text-sm font-mono text-foreground">
-          {nodesToJSX({ nodes: node.children })}
-        </code>
+      <pre>
+        <code>{nodesToJSX({ nodes: node.children })}</code>
       </pre>
     )
   },

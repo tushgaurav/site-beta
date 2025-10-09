@@ -3,6 +3,10 @@ import { RichText } from '@/components/richtext'
 import { Page, PageTitle, Paragraph } from '@/components/page'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
+import MoreArticles from './_components/more-articles'
+import Image from 'next/image'
+import { Badge } from '@/components/ui/badge'
+import ShareThis from './_components/share-this'
 
 export async function generateMetadata({
   params,
@@ -51,15 +55,44 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <Page>
+      <div className="flex items-center gap-2 lg:gap-4 mt-10">
+        {article.tags?.map((tag) => (
+          <Badge key={tag}>{tag}</Badge>
+        ))}
+
+        <div className="text-muted-foreground text-sm font-semibold uppercase">
+          {new Date(article.publishedAt!).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })}
+        </div>
+        <span className="mx-2 text-muted-foreground/40">|</span>
+        <div className="text-muted-foreground text-sm font-semibold uppercase">
+          {article.readingTime} min read
+        </div>
+      </div>
       <PageTitle>{article.title}</PageTitle>
 
-      <Paragraph className="mt-2 mb-10 max-w-[65ch] text-muted-foreground text-lg">
+      <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-xl">
         {article.excerpt}
       </Paragraph>
 
-      <article className="max-w-[75ch]">
+      <Image
+        src={article.featuredImage?.url!}
+        alt={article.featuredImage?.alt!}
+        width={800}
+        height={800}
+        className="rounded-lg max-w-2xl h-auto mb-4"
+      />
+
+      <div className="dark mx-auto grid gap-x-10 xl:grid-cols-[1fr_300px]">
         <RichText data={article.content} />
-      </article>
+        <aside className="sticky top-20 self-start h-fit">
+          <MoreArticles />
+          <ShareThis />
+        </aside>
+      </div>
     </Page>
   )
 }

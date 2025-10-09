@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -191,67 +192,4 @@
 
 .limit-width {
   @apply max-w-7xl mx-auto;
-}
-
-/* Article/Blog Typography Styles */
-.prose-article {
-  /* Better text rendering */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-
-  /* Optimal line length for readability */
-  max-width: 75ch;
-
-  /* Selection styling */
-  ::selection {
-    @apply bg-primary/20;
-  }
-
-  /* Smooth scroll for anchor links */
-  scroll-behavior: smooth;
-
-  /* Image styling */
-  img {
-    @apply rounded-lg my-8 shadow-md w-full h-auto;
-  }
-
-  /* Horizontal rule styling */
-  hr {
-    @apply my-8 border-t-2 border-border/50;
-  }
-
-  /* Table styling */
-  table {
-    @apply w-full my-6 border-collapse;
-
-    th {
-      @apply bg-muted px-4 py-2 text-left font-bold border border-border;
-    }
-
-    td {
-      @apply px-4 py-2 border border-border;
-    }
-
-    tr:nth-child(even) {
-      @apply bg-muted/30;
-    }
-  }
-
-  /* Nested list styling */
-  ul ul,
-  ol ul,
-  ul ol,
-  ol ol {
-    @apply mt-2 mb-2;
-  }
-
-  /* Figure and figcaption */
-  figure {
-    @apply my-8;
-
-    figcaption {
-      @apply text-sm text-muted-foreground text-center mt-2 italic;
-    }
-  }
 }
