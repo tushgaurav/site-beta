@@ -89,7 +89,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <div className="dark mx-auto grid gap-x-10 xl:grid-cols-[1fr_300px]">
         <RichText data={article.content} />
         <aside className="sticky top-20 self-start h-fit">
-          <MoreArticles />
+          <MoreArticles currentArticleSlug={slug} />
           <ShareThis />
         </aside>
       </div>

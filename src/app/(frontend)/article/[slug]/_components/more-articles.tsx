@@ -1,26 +1,48 @@
-const recommendedArticles = [
-  {
-    title: 'How to build a 3D printer',
-    excerpt: 'This is a short excerpt of the article',
-    slug: 'how-to-build-a-3d-printer',
-  },
-  {
-    title: 'A Practical Guide to get Laid',
-    excerpt: 'This is a short excerpt of the article about getting laid and getting some pussy',
-    slug: 'a-practical-guide-to-get-laid',
-  },
-]
+import { getPayload } from 'payload'
+import config from '@/payload.config'
+import Image from 'next/image'
+import Link from 'next/link'
 
-export default function MoreArticles() {
+export default async function MoreArticles({ currentArticleSlug }: { currentArticleSlug: string }) {
+  const payloadConfig = await config
+  const payload = await getPayload({ config: payloadConfig })
+
+  const { docs: articles } = await payload.find({
+    collection: 'articles',
+    where: {
+      slug: {
+        not_equals: currentArticleSlug,
+      },
+    },
+    limit: 3,
+  })
+
+  const recommendedArticles = articles.slice(0, 3)
+
   return (
     <div>
       <h4 className="uppercase text-sm text-muted-foreground font-semibold mb-4">More Articles</h4>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         {recommendedArticles.map((article) => (
-          <div key={article.slug}>
-            <h5 className="text-sm font-semibold">{article.title}</h5>
-            <p className="text-sm text-muted-foreground">{article.excerpt}</p>
-          </div>
+          <Link
+            key={article.slug}
+            href={`/article/${article.slug}`}
+            className="grid grid-cols-[1.4fr_1fr] gap-4 group"
+          >
+            <div>
+              <h5 className="text-sm font-semibold line-clamp-2 group-hover:text-muted-foreground transition-colors">
+                {article.title}
+              </h5>
+              <p className="text-sm text-muted-foreground line-clamp-2">{article.excerpt}</p>
+            </div>
+            <Image
+              src={article.featuredImage?.url!}
+              alt={article.featuredImage?.alt!}
+              width={100}
+              height={100}
+              className="rounded-xl h-full w-full"
+            />
+          </Link>
         ))}
       </div>
     </div>
