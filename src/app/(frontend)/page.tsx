@@ -5,6 +5,8 @@ import React from 'react'
 import config from '@/payload.config'
 import ArticlesSection from './_components/articles'
 import { Page, PageTitle, Paragraph } from '@/components/page'
+import { Separator } from '@/components/ui/separator'
+import SocialLinks from './_components/social-links'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -19,8 +21,9 @@ export default async function HomePage() {
 
   return (
     <Page>
-      <PageTitle className="mt-10">{homepage.heroTitle}</PageTitle>
-      <Paragraph className="mt-2 mb-10 max-w-[60ch] text-gray-400">{homepage.bio}</Paragraph>
+      <PageTitle className="mt-10 mb-4">{homepage.heroTitle}</PageTitle>
+      <Paragraph className="mt-4 mb-12 max-w-[60ch] text-gray-400">{homepage.bio}</Paragraph>
+      <SocialLinks />
       <ArticlesSection />
     </Page>
   )

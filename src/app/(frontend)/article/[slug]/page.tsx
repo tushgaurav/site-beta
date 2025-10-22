@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import ShareThis from './_components/share-this'
 import { Separator } from '@/components/ui/separator'
+import { Media } from '@/payload-types'
 
 export async function generateMetadata({
   params,
@@ -80,8 +81,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </Paragraph>
 
       <Image
-        src={article.featuredImage?.url!}
-        alt={article.featuredImage?.alt!}
+        src={(article.featuredImage as Media)?.url!}
+        alt={(article.featuredImage as Media)?.alt!}
         width={800}
         height={800}
         className="rounded-lg max-w-2xl h-auto mb-4"

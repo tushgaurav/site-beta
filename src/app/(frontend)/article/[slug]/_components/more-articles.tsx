@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Media } from '@/payload-types'
 
 export default async function MoreArticles({ currentArticleSlug }: { currentArticleSlug: string }) {
   const payloadConfig = await config
@@ -36,8 +37,8 @@ export default async function MoreArticles({ currentArticleSlug }: { currentArti
               <p className="text-sm text-muted-foreground line-clamp-2">{article.excerpt}</p>
             </div>
             <Image
-              src={article.featuredImage?.url!}
-              alt={article.featuredImage?.alt!}
+              src={(article.featuredImage as Media)?.url!}
+              alt={(article.featuredImage as Media)?.alt!}
               width={100}
               height={100}
               className="rounded-xl h-full w-full"

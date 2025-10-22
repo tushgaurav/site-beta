@@ -1,5 +1,6 @@
 import { JSXConverters } from '@payloadcms/richtext-lexical/react'
 import { SerializedHeadingNode } from '@payloadcms/richtext-lexical'
+import type { ElementType } from 'react'
 
 export const headingConverter: JSXConverters<SerializedHeadingNode> = {
   heading: ({ node, nodesToJSX }) => {
@@ -54,7 +55,7 @@ export const headingConverter: JSXConverters<SerializedHeadingNode> = {
           </h6>
         )
       default:
-        const Tag = node.tag
+        const Tag = node.tag as ElementType
         return <Tag id={id}>{children}</Tag>
     }
   },

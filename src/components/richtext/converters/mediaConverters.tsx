@@ -1,6 +1,7 @@
 import { JSXConverters } from '@payloadcms/richtext-lexical/react'
 import { SerializedUploadNode, SerializedHorizontalRuleNode } from '@payloadcms/richtext-lexical'
 import Image from 'next/image'
+import { Media } from '@/payload-types'
 
 export const uploadConverter: JSXConverters<SerializedUploadNode> = {
   upload: ({ node }) => {
@@ -10,7 +11,7 @@ export const uploadConverter: JSXConverters<SerializedUploadNode> = {
       return null
     }
 
-    const { url, alt, width, height, filename } = value
+    const { url, alt, width, height, filename } = value as Media
 
     if (!url) {
       return null

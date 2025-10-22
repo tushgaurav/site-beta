@@ -48,7 +48,7 @@ export const inlineConverters: JSXConverters = {
       const href =
         typeof fields.doc.value === 'string'
           ? fields.doc.value
-          : `/article/${fields.doc.value.slug}`
+          : `/article/${(fields.doc.value as unknown as { slug: string }).slug}`
 
       return (
         <Link
