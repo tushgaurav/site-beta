@@ -4,6 +4,7 @@ import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import Image from 'next/image'
 import type { Media } from '@/payload-types'
+import Hobbies from '../_components/hobbies'
 
 export default async function About() {
   const payload = await getPayload({ config })
@@ -25,6 +26,8 @@ export default async function About() {
           <Image src={profileImage.url!} alt={profileImage.alt!} width={300} height={300} />
         )}
       </section>
+
+      <Hobbies />
     </Page>
   )
 }

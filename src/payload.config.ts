@@ -11,6 +11,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Articles } from './collections/Articles'
+import { Hobbies } from './collections/Hobbies'
 import { SocialLinks } from './collections/Social'
 import { homepage, about } from './globals/site'
 
@@ -29,7 +30,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Media, Articles, SocialLinks],
+  collections: [Users, Media, Articles, SocialLinks, Hobbies],
   globals: [homepage, about],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET!,

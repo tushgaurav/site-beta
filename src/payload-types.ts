@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     articles: Article;
     'social-links': SocialLink;
+    hobbies: Hobby;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -81,6 +82,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
+    hobbies: HobbiesSelect<false> | HobbiesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -226,6 +228,37 @@ export interface SocialLink {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hobbies".
+ */
+export interface Hobby {
+  id: number;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
+  description: string;
+  featuredImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -246,6 +279,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'social-links';
         value: number | SocialLink;
+      } | null)
+    | ({
+        relationTo: 'hobbies';
+        value: number | Hobby;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -361,6 +398,22 @@ export interface SocialLinksSelect<T extends boolean = true> {
   'icon-upload'?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hobbies_select".
+ */
+export interface HobbiesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  description?: T;
+  featuredImage?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
