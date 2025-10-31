@@ -1,67 +1,59 @@
-# Payload Blank Template
+# Tushar's Personal Website
 
-This template comes configured with the bare minimum to get started on anything you need.
+Fifth time's the charm. (The [first](https://github.com/tushgaurav/site-old), [second](https://github.com/tushgaurav/tushgaurav.in-django), [third](https://github.com/tushgaurav/old.tushgaurav.in), and [fourth](https://github.com/tushgaurav/personal-blog) weren't.)
 
-## Quick start
+![Tushar's Personal Website](./screenshot.png)
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+My personal website built with Next.js, Payload CMS, and TypeScript. It's where I share blog posts, hobbies, and projects.
 
-## Quick Start - local setup
+## About
 
-To spin up this template locally, follow these steps:
+This is the source code for [tushgaurav.com](https://tushgaurav.com). It's a simple yet powerful site combining a headless CMS with a modern frontend. Write content in Payload, and it automatically shows up on the website.
 
-### Clone
+## Tech Stack
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+- Next.js with TypeScript, Tailwind CSS, and Shadcn UI
+- Payload CMS
+- PostgreSQL (Neon) + Drizzle ORM
 
-### Development
+## Getting Started
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URI` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+### Prerequisites
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+- Node.js v22+ (v24 recommended)
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+### Running Locally
 
-#### Docker (Optional)
+1. Clone the repo:
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+   ```bash
+   git clone git@github.com:tushgaurav/site.git
+   cd site
+   ```
 
-To do so, follow these steps:
+2. Install and setup:
 
-- Modify the `MONGODB_URI` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URI` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+   ```bash
+   pnpm install
+   cp .env.example .env
+   # Add your PostgreSQL URI to .env
+   ```
 
-## How it works
+3. Start the dev server:
+   ```bash
+   pnpm dev
+   ```
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+Open [http://localhost:3000](http://localhost:3000) and you're good to go!
 
-### Collections
+### Using Docker
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+If you prefer Docker:
 
-- #### Users (Authentication)
+```bash
+docker-compose up
+```
 
-  Users are auth-enabled collections that have access to the admin panel.
+## Contributing
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
-
-- #### Media
-
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
-
-### Docker
-
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
-
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
-
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+Found a bug or have an idea? Feel free to open an issue or submit a PR. I'd love the help!
