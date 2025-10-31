@@ -21,7 +21,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <Navbar />
           <main className="pt-16">
-          {children}
+            {children}
           </main>
           <Footer />
         </ThemeProvider>
