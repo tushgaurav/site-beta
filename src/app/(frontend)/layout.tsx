@@ -20,7 +20,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body className="min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <Navbar />
+          <main className="pt-16">
           {children}
+          </main>
           <Footer />
         </ThemeProvider>
       </body>
