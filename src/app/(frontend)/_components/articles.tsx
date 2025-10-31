@@ -50,7 +50,7 @@ export default async function ArticlesSection() {
                     src={imageUrl}
                     alt={featuredImage?.alt || article.title}
                     fill
-                    className="object-cover"
+                    className="object-cover filter grayscale contrast-90 brightness-80 opacity-90 hover:grayscale-0 hover:opacity-100 hover:brightness-100 transition-all duration-300"
                   />
                 </div>
               )}
