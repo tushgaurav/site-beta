@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { AnimatedThemeToggler } from '../animated-theme-toggle'
 import { ModeToggle } from '../theme-toggle'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
@@ -18,7 +19,14 @@ export default function Navbar() {
             alt="Tushar Gaurav"
             width={150}
             height={50}
-            className="h-8 transition-all duration-300 hover:drop-shadow-[0_0_12px_white] hover:brightness-110"
+            className="hidden dark:block h-8 transition-all duration-300 hover:drop-shadow-[0_0_12px_white] hover:brightness-110"
+          />
+          <Image
+            src="/tushar-sign-light.jpg"
+            alt="Tushar Gaurav"
+            width={150}
+            height={40}
+            className="dark:hidden h-8 transition-all duration-300 hover:drop-shadow-[0_0_12px_white] hover:brightness-110"
           />
         </Link>
 
@@ -33,8 +41,8 @@ export default function Navbar() {
           <Link href="/contact" className="hover:text-primary transition-colors">
             Contact
           </Link>
-          <div className="ml-2">
-            <ModeToggle />
+          <div className="ml-2 mt-1">
+            <AnimatedThemeToggler />
           </div>
         </div>
 
