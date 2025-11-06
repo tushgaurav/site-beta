@@ -179,6 +179,8 @@ export interface Article {
   slug: string;
   author: number | User;
   status: 'draft' | 'published';
+  isFeatured?: boolean | null;
+  unlisted?: boolean | null;
   publishedAt?: string | null;
   featuredImage?: (number | null) | Media;
   /**
@@ -376,6 +378,8 @@ export interface ArticlesSelect<T extends boolean = true> {
   slug?: T;
   author?: T;
   status?: T;
+  isFeatured?: T;
+  unlisted?: T;
   publishedAt?: T;
   featuredImage?: T;
   excerpt?: T;

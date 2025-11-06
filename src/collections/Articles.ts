@@ -71,6 +71,22 @@ export const Articles: CollectionConfig = {
       },
     },
     {
+      name: 'isFeatured',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: "unlisted",
+      type: "checkbox",
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       admin: {

@@ -27,11 +27,6 @@ export const uploadConverter: JSXConverters<SerializedUploadNode> = {
           className="rounded-lg shadow-md w-full h-auto"
           priority={false}
         />
-        {alt && (
-          <figcaption className="text-sm text-muted-foreground text-center mt-3 italic">
-            {alt}
-          </figcaption>
-        )}
       </figure>
     )
   },
