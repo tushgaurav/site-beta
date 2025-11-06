@@ -76,17 +76,19 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </div>
       <PageTitle>{article.title}</PageTitle>
 
-      <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-xl">
-        {article.excerpt}
-      </Paragraph>
+      <div className="lg:flex flex-row-reverse items-start gap-8">
+        <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-xl lg:max-w-none lg:mt-0 relative before:content-['/'] before:hidden before:lg:inline-block before:text-white before:mr-2 before:text-2xl before:xl:text-3xl">
+          {article.excerpt}
+        </Paragraph>
 
-      <Image
-        src={(article.featuredImage as Media)?.url!}
-        alt={(article.featuredImage as Media)?.alt!}
-        width={800}
-        height={800}
-        className="rounded-lg max-w-2xl h-auto mb-4"
-      />
+        <Image
+          src={(article.featuredImage as Media)?.url!}
+          alt={(article.featuredImage as Media)?.alt!}
+          width={800}
+          height={800}
+          className="rounded-lg max-w-2xl h-auto mb-4"
+        />
+      </div>
 
       <div className="dark mx-auto grid gap-x-10 xl:grid-cols-[1fr_300px]">
         <RichText data={article.content} />
