@@ -22,6 +22,7 @@
     "@icons-pack/react-simple-icons": "^13.8.0",
     "@neondatabase/serverless": "^1.0.2",
     "@payloadcms/db-postgres": "3.58.0",
+    "@payloadcms/email-resend": "^3.63.0",
     "@payloadcms/next": "3.58.0",
     "@payloadcms/payload-cloud": "3.58.0",
     "@payloadcms/richtext-lexical": "3.58.0",

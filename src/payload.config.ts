@@ -1,5 +1,5 @@
-// storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
@@ -60,4 +60,9 @@ export default buildConfig({
       },
     }),
   ],
+  email: resendAdapter({
+    defaultFromAddress: 'hi@mail.tushgaurav.com',
+    defaultFromName: 'Tushar Gaurav',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
 })
