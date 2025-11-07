@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function Contact() {
   return (
     <Page>
-      <PageTitle className="text-center">Get in touch</PageTitle>
+      <PageTitle className="text-center">Drop me a line</PageTitle>
 
       <Script
         defer
@@ -30,8 +30,8 @@ export default function Contact() {
             // Uncomment and add your video/image source when ready
             videoSrc="https://s3.ap-south-1.amazonaws.com/tushgaurav.com/contact.mp4"
             // imageSrc="/path/to/your/image.jpg"
-            overlayText="Let's Connect"
-            overlaySubtext="I'd love to hear from you. Send me a message and I'll respond as soon as possible."
+            overlayText="Say Hello"
+            overlaySubtext="Whether it's about a project, collaboration, or just to say hi—I'd love to hear from you."
           />
         </div>
       </div>

@@ -3,6 +3,7 @@ import './globals.css'
 import { ThemeProvider } from '@/providers/theme-provider'
 import Navbar from '@/components/base/navbar'
 import Footer from '@/components/base/footer'
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata = {
   title: {
@@ -24,6 +25,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             {children}
           </main>
           <Footer />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

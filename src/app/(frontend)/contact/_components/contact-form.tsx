@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { processContactFormSubmission } from "../actions"
+import { toast } from "sonner"
 
 const categoryOptions = [
     { label: "General", value: "general" },
@@ -62,7 +63,7 @@ export default function ContactForm() {
 
     useEffect(() => {
         if (form.formState.isSubmitSuccessful) {
-            console.log("Form reset successfully")
+            toast("Message sent, I'll get back to you as soon as possible.")
             form.reset()
         }
     }, [form.formState.isSubmitSuccessful])
@@ -200,7 +201,7 @@ export default function ContactForm() {
                                 onCheckedChange={field.onChange}
                             />
                             <FieldLabel htmlFor="send-copy" className="!mt-0">
-                                Send a copy to my email
+                                Send me a copy
                             </FieldLabel>
                         </Field>
                     )}
