@@ -21,10 +21,10 @@ export default async function About() {
       <PageTitle>About</PageTitle>
 
       <section className="flex gap-4">
-        <RichText data={about.content} />
-        {profileImage && (
+        <RichText data={about.content} className="max-w-2xl" />
+        {/* {profileImage && (
           <Image src={profileImage.url!} alt={profileImage.alt!} width={300} height={300} />
-        )}
+        )} */}
       </section>
 
       <Hobbies />

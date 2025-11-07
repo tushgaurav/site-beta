@@ -8,12 +8,14 @@ export default async function ArticlesSection() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  // Fetch published articles, sorted by publishedAt date
   const { docs: articles } = await payload.find({
     collection: 'articles',
     where: {
       status: {
         equals: 'published',
+      },
+      unlisted: {
+        equals: false,
       },
     },
     sort: '-publishedAt',
