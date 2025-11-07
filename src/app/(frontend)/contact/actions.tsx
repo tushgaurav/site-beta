@@ -35,7 +35,7 @@ export async function processContactFormSubmission(formData: z.infer<typeof form
     })
 
     if (sendCopy) {
-        const emailHtml = await render(<ContactResponseEmail name={name} email={email} category={category} message={message} submittedAt={new Date()} sendCopy={sendCopy} />)
+        const emailHtml = await render(<ContactResponseEmail name={name} email={email} category={category} message={message} submittedAt={new Date()} />)
         await payload.sendEmail({
             to: email,
             subject: "Message from Tushar Gaurav",
