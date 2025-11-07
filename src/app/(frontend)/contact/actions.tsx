@@ -1,14 +1,16 @@
 "use server"
 
+import ContactResponseEmail from "@/../emails/contact-responses"
 import { formSchema } from "./_components/contact-form"
 import { z } from "zod"
 import { validateCaptchaToken } from "@/lib/utils"
 import config from "@/payload.config"
 import { getPayload } from "payload"
+import { render } from "@react-email/components"
 
 export async function processContactFormSubmission(formData: z.infer<typeof formSchema>, token: string) {
     if (!token) {
-        return { error: "Invalid request"}
+        return { error: "Invalid request" }
     }
 
     const isValid = await validateCaptchaToken(token)
@@ -31,6 +33,15 @@ export async function processContactFormSubmission(formData: z.infer<typeof form
             category,
         }
     })
+
+    if (sendCopy) {
+        const emailHtml = await render(<ContactResponseEmail name={name} email={email} category={category} message={message} submittedAt={new Date()} sendCopy={sendCopy} />)
+        await payload.sendEmail({
+            to: email,
+            subject: "Message from Tushar Gaurav",
+            html: emailHtml,
+        })
+    }
 
     return {
         success: "Message saved"
