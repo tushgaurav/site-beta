@@ -33,8 +33,6 @@ export async function POST(request: Request) {
         });
 
         response = ai_response.choices[0].message.content;
-        console.log(response)
-
     }
 
     return Response.json(response)

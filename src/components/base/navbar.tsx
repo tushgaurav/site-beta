@@ -32,6 +32,9 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex gap-6 text-sm items-center">
+          <Link href="/voice" className="hover:text-primary transition-colors">
+            Voice
+          </Link>
           <Link href="/archive" className="hover:text-primary transition-colors">
             Archive
           </Link>
