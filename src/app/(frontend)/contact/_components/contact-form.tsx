@@ -18,6 +18,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { processContactFormSubmission } from "../actions"
 import { toast } from "sonner"
+import { Spinner } from "@/components/ui/spinner"
 
 const categoryOptions = [
     { label: "General", value: "general" },
@@ -210,7 +211,13 @@ export default function ContactForm() {
 
             <div className="pt-2">
                 <Button type="submit" form="contact-form" size="lg" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+                    {form.formState.isSubmitting ? (
+                        <>
+                            <Spinner /> Submitting...
+                        </>
+                    ) : (
+                        "Submit"
+                    )}
                 </Button>
             </div>
         </form>
