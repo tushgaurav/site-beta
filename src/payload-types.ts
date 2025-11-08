@@ -502,22 +502,103 @@ export interface Homepage {
  */
 export interface About {
   id: number;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
+  hero: {
+    title: string;
+    tagline: string;
   };
-  profileImage?: (number | null) | Media;
+  history: {
+    heading: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  mission: {
+    heading: string;
+    missions?:
+      | {
+          mission: string;
+          id?: string | null;
+        }[]
+      | null;
+    currentFocus?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  realTalk: {
+    heading: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  beliefs: {
+    heading: string;
+    beliefsList?:
+      | {
+          belief: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  interests: {
+    heading: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  wisdom?:
+    | {
+        quote: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -538,8 +619,59 @@ export interface HomepageSelect<T extends boolean = true> {
  * via the `definition` "about_select".
  */
 export interface AboutSelect<T extends boolean = true> {
-  content?: T;
-  profileImage?: T;
+  hero?:
+    | T
+    | {
+        title?: T;
+        tagline?: T;
+      };
+  history?:
+    | T
+    | {
+        heading?: T;
+        content?: T;
+      };
+  mission?:
+    | T
+    | {
+        heading?: T;
+        missions?:
+          | T
+          | {
+              mission?: T;
+              id?: T;
+            };
+        currentFocus?: T;
+      };
+  realTalk?:
+    | T
+    | {
+        heading?: T;
+        content?: T;
+      };
+  beliefs?:
+    | T
+    | {
+        heading?: T;
+        beliefsList?:
+          | T
+          | {
+              belief?: T;
+              id?: T;
+            };
+      };
+  interests?:
+    | T
+    | {
+        heading?: T;
+        content?: T;
+      };
+  wisdom?:
+    | T
+    | {
+        quote?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
