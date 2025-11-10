@@ -9,7 +9,6 @@ import Hobbies from '../_components/hobbies'
 export default async function About() {
   const payload = await getPayload({ config })
   const about = await payload.findGlobal({ slug: 'about', depth: 1 })
-  console.log(about)
 
   return (
     <Page>
