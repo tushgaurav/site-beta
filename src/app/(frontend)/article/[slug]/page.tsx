@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge'
 import ShareThis from './_components/share-this'
 import { Separator } from '@/components/ui/separator'
 import { Media } from '@/payload-types'
+import CopyMarkdown from './_components/copy-markdown'
+import { convertLexicalToMarkdown, editorConfigFactory } from '@payloadcms/richtext-lexical'
 
 export async function generateMetadata({
   params,
@@ -98,7 +100,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </aside>
       </div>
 
-      <Separator className="my-4" />
+      <Separator className="mt-4 mb-8" />
+      <div className="flex items-center gap-2">
+        <CopyMarkdown markdown={
+          convertLexicalToMarkdown({
+            data: article.content,
+            editorConfig: await editorConfigFactory.default(
+              { config: await config }
+            )
+          })
+        } />
+      </div>
     </Page>
   )
 }
