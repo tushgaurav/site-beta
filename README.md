@@ -54,6 +54,12 @@ If you prefer Docker:
 docker-compose up
 ```
 
+### File Structure and Naming Conventions
+
+- All base level components are in `src/components`, these are components that are used across the entire application.
+- Page specific components are in `src/app/(frontend)/<page-name>/_components`, these are components that are used on a specific page or a group of pages, these are generally not used higher up in the component tree.
+- Generally, all components should be named like `component-name.tsx` in lower case with hyphens separating the words.
+
 ## Contributing
 
 Found a bug or have an idea? Feel free to open an issue or submit a PR. I'd love the help!
