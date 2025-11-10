@@ -27,7 +27,7 @@ function OrbVisualizer({
     const ballRef = useRef<THREE.Mesh | null>(null)
     const originalPositionsRef = useRef<Float32Array | null>(null)
     const resizeObserverRef = useRef<ResizeObserver | null>(null)
-    const animationFrameRef = useRef<number>()
+    const animationFrameRef = useRef<number | null>(null)
 
     const volumeRef = useRef<number>(volume)
     const intensityRef = useRef<number>(intensity)
@@ -36,6 +36,7 @@ function OrbVisualizer({
 
     const noise = useMemo(() => createNoise3D(), [])
     const workingVertex = useMemo(() => new THREE.Vector3(), [])
+    const BASE_RADIUS = 14
 
     useEffect(() => {
         volumeRef.current = volume
@@ -80,7 +81,7 @@ function OrbVisualizer({
         groupRef.current = group
         scene.add(group)
 
-        const geometry = new THREE.IcosahedronGeometry(10, 8)
+        const geometry = new THREE.IcosahedronGeometry(BASE_RADIUS, 8)
         const material = new THREE.MeshLambertMaterial({
             color: 0xffffff,
             wireframe: true,
@@ -126,7 +127,7 @@ function OrbVisualizer({
             const geometry = mesh.geometry as THREE.BufferGeometry
             const positionAttribute = geometry.getAttribute('position')
 
-            const offset = 10
+            const offset = BASE_RADIUS
             const amp = 2.5
             const time = window.performance.now()
             const rf = 0.00001
@@ -148,9 +149,9 @@ function OrbVisualizer({
                         workingVertex.y + time * rf * 8,
                         workingVertex.z + time * rf * 9,
                     ) *
-                        amp *
-                        volumeValue *
-                        intensityRef.current
+                    amp *
+                    volumeValue *
+                    intensityRef.current
 
                 workingVertex.multiplyScalar(distance)
                 positionAttribute.setXYZ(i, workingVertex.x, workingVertex.y, workingVertex.z)
@@ -214,8 +215,9 @@ function OrbVisualizer({
         animationFrameRef.current = requestAnimationFrame(renderScene)
 
         return () => {
-            if (animationFrameRef.current) {
+            if (animationFrameRef.current !== null) {
                 cancelAnimationFrame(animationFrameRef.current)
+                animationFrameRef.current = null
             }
 
             if (resizeObserverRef.current) {
@@ -248,8 +250,9 @@ function OrbVisualizer({
 
     useEffect(() => {
         return () => {
-            if (animationFrameRef.current) {
+            if (animationFrameRef.current !== null) {
                 cancelAnimationFrame(animationFrameRef.current)
+                animationFrameRef.current = null
             }
             if (resizeObserverRef.current) {
                 resizeObserverRef.current.disconnect()

@@ -7,7 +7,8 @@ import SYSTEM from './SYSTEM'
 import OrbVisualizer from './orb-visualizer'
 import { internetSearchTool } from './tools/internet-search'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+
+const INTENSITY = 3
 
 export default function RealtimeVoice() {
     const agentRef = useRef<RealtimeAgent | null>(null)
@@ -16,7 +17,6 @@ export default function RealtimeVoice() {
     const [status, setStatus] = useState<string>('Disconnected')
     const [isSessionActive, setIsSessionActive] = useState(false)
     const [isConnecting, setIsConnecting] = useState(false)
-    const [intensity, setIntensity] = useState(3)
     const [currentVolume, setCurrentVolume] = useState(0)
 
     const audioContextRef = useRef<AudioContext | null>(null)
@@ -202,20 +202,13 @@ export default function RealtimeVoice() {
         [stopSession],
     )
 
-    const handleIntensityChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            setIntensity(Number(event.target.value))
-        },
-        [],
-    )
-
     return (
         <div className="flex flex-col items-center gap-6">
             <div className="w-full max-w-xs sm:max-w-sm">
                 <OrbVisualizer
                     volume={currentVolume}
                     isActive={isSessionActive}
-                    intensity={intensity}
+                    intensity={INTENSITY}
                     onClick={handleToggleSession}
                     className="hover:cursor-pointer"
                 />
@@ -225,21 +218,6 @@ export default function RealtimeVoice() {
                     ? 'Click orb or stop to pause the conversation.'
                     : 'Click the orb to start the conversation.'}
             </p>
-            <div className="w-full max-w-md space-y-3">
-                <Label htmlFor="intensity-slider">
-                    Animation Intensity: {intensity.toFixed(1)}
-                </Label>
-                <input
-                    id="intensity-slider"
-                    type="range"
-                    min={0.5}
-                    max={12}
-                    step={0.5}
-                    value={intensity}
-                    onChange={handleIntensityChange}
-                    className="w-full"
-                />
-            </div>
             <div className="flex flex-col items-center gap-2">
                 <Button
                     onClick={handleToggleSession}

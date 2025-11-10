@@ -11,7 +11,6 @@ export default function Voice() {
 
     return (
         <Page>
-            <PageTitle>Voice</PageTitle>
             <RealtimeVoice />
         </Page>
     )
