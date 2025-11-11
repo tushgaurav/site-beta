@@ -12,7 +12,7 @@ export default function ProjectsPage() {
     <Page>
       <PageTitle>Projects</PageTitle>
       <Paragraph className="mb-8 text-muted-foreground">
-        Some of the things I've worked on. Most of them are open source.
+        A collection of side projects, half-finished ideas, and things that actually work (mostly).
       </Paragraph>
 
       <ProjectsAtGlance />

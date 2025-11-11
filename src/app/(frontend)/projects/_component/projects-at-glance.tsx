@@ -31,29 +31,31 @@ export default async function ProjectsAtGlance() {
           const imageUrl = projectImage?.url
 
           return (
-            <div
-              key={project.id}
-              className="bg-card rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-            >
-              {imageUrl && (
-                <div className="relative w-full h-48">
-                  <Image
-                    src={imageUrl}
-                    alt={projectImage?.alt || project.title}
-                    fill
-                    className="object-cover filter grayscale contrast-90 brightness-80 opacity-90 hover:grayscale-0 hover:opacity-100 hover:brightness-100 transition-all duration-300"
-                  />
-                </div>
-              )}
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{project.title}</h3>
-                {project.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {project.description}
-                  </p>
+            <Link href={`/projects/${project.slug}`} key={project.id}>
+              <div
+                key={project.id}
+                className="bg-card rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+              >
+                {imageUrl && (
+                  <div className="relative w-full h-48">
+                    <Image
+                      src={imageUrl}
+                      alt={projectImage?.alt || project.title}
+                      fill
+                      className="object-cover filter grayscale contrast-90 brightness-80 opacity-90 hover:grayscale-0 hover:opacity-100 hover:brightness-100 transition-all duration-300"
+                    />
+                  </div>
                 )}
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold mb-2">{project.title}</h3>
+                  {project.description && (
+                    <p className="text-sm text-muted-foreground line-clamp-3">
+                      {project.description}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
+            </Link>
           )
         })}
       </div>

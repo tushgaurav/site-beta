@@ -32,5 +32,16 @@ export const Projects: CollectionConfig = {
       type: 'richText',
       required: true,
     },
+    {
+      name: 'links',
+      type: 'array',
+      fields: [
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
   ],
 }

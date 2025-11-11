@@ -302,6 +302,12 @@ export interface Project {
     };
     [k: string]: unknown;
   };
+  links?:
+    | {
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -496,6 +502,12 @@ export interface ProjectsSelect<T extends boolean = true> {
   description?: T;
   image?: T;
   content?: T;
+  links?:
+    | T
+    | {
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
