@@ -3,7 +3,7 @@ import './globals.css'
 import { ThemeProvider } from '@/providers/theme-provider'
 import Navbar from '@/components/base/navbar'
 import Footer from '@/components/base/footer'
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from '@/components/ui/sonner'
 
 export const metadata = {
   title: {
@@ -18,12 +18,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen">
+      <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <Navbar />
-          <main className="pt-16">
-            {children}
-          </main>
+          <main className="flex-1 pt-16">{children}</main>
           <Footer />
           <Toaster />
         </ThemeProvider>
