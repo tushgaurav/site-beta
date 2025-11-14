@@ -1,32 +1,30 @@
-import Link from "next/link";
+import Link from 'next/link'
 
-import { SiGithub } from '@icons-pack/react-simple-icons';
-import { SiX } from '@icons-pack/react-simple-icons';
-import { getPayload } from "payload";
-import config from "@/payload.config";
+import { SiGithub } from '@icons-pack/react-simple-icons'
+import { SiX } from '@icons-pack/react-simple-icons'
+import { getPayload } from 'payload'
+import config from '@/payload.config'
 
 function getIcon(iconName?: string) {
-  if (!iconName) return null;
+  if (!iconName) return null
   switch (iconName.toLowerCase()) {
     case 'github':
-      return <SiGithub aria-label="GitHub" />;
+      return <SiGithub aria-label="GitHub" />
     case 'x':
     case 'twitter':
-      return <SiX aria-label="X" />;
+      return <SiX aria-label="X" />
     default:
-      return null;
+      return null
   }
 }
 
 export default async function SocialLinks() {
   const payload = await getPayload({
     config: config,
-  });
- const { docs: socialLinks } = await payload.find({
+  })
+  const { docs: socialLinks } = await payload.find({
     collection: 'social-links',
-  });
-
-  console.log(socialLinks);
+  })
 
   return (
     <div className="flex gap-4 mb-12">
