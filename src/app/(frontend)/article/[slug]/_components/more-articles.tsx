@@ -39,9 +39,9 @@ export default async function MoreArticles({ currentArticleSlug }: { currentArti
             <Image
               src={(article.featuredImage as Media)?.url!}
               alt={(article.featuredImage as Media)?.alt!}
-              width={100}
-              height={100}
-              className="rounded-xl h-full w-full"
+              width={200}
+              height={150}
+              className="rounded-xl h-full w-full object-cover"
             />
           </Link>
         ))}
