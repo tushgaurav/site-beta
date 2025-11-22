@@ -79,8 +79,8 @@ export const Articles: CollectionConfig = {
       },
     },
     {
-      name: "unlisted",
-      type: "checkbox",
+      name: 'unlisted',
+      type: 'checkbox',
       defaultValue: false,
       admin: {
         position: 'sidebar',

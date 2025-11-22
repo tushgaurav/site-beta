@@ -1,0 +1,22 @@
+'use client'
+
+import { useState } from 'react'
+import { CopyIcon, ClipboardCheck } from 'lucide-react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+
+export default function CopyButton({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(code)
+    setCopied(true)
+    toast.success('Code copied to clipboard')
+  }
+
+  return (
+    <Button variant="outline" size="icon" onClick={handleCopy}>
+      {copied ? <ClipboardCheck className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
+    </Button>
+  )
+}
