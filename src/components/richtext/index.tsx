@@ -11,7 +11,7 @@ export function RichText(props: Props) {
   const { className, ...rest } = props
 
   return (
-    <article className={cn('prose prose-zinc dark:prose-invert lg:prose-xl', className)}>
+    <article className={cn('prose dark:prose-invert lg:prose-xl', className)}>
       <RichTextConverter {...rest} converters={jsxConverter} />
     </article>
   )
