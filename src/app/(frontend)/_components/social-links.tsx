@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
-import { SiGithub } from '@icons-pack/react-simple-icons'
+import { SiGithub, SiDeviantart, SiMastodon, SiTwitch } from '@icons-pack/react-simple-icons'
 import { SiX } from '@icons-pack/react-simple-icons'
+import { Linkedin } from 'lucide-react'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 
@@ -11,8 +12,17 @@ function getIcon(iconName?: string) {
     case 'github':
       return <SiGithub aria-label="GitHub" />
     case 'x':
+      return <SiX aria-label="X" />
     case 'twitter':
       return <SiX aria-label="X" />
+    case 'linkedin':
+      return <Linkedin />
+    case 'deviantart':
+      return <SiDeviantart aria-label="DeviantArt" />
+    case 'mastodon':
+      return <SiMastodon aria-label="Mastodon" />
+    case 'twitch':
+      return <SiTwitch aria-label="Twitch" />
     default:
       return null
   }
@@ -25,6 +35,8 @@ export default async function SocialLinks() {
   const { docs: socialLinks } = await payload.find({
     collection: 'social-links',
   })
+
+  console.log(socialLinks)
 
   return (
     <div className="flex gap-4 mb-12">

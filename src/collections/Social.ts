@@ -33,6 +33,7 @@ export const SocialLinks: CollectionConfig = {
         required: false,
         admin: {
             position: 'sidebar',
+            disableListColumn: true,
         },
     }
   ],
