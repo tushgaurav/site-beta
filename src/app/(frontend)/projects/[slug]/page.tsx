@@ -116,7 +116,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                   <>
                     <Github className="h-4 w-4" />
                     View on GitHub
-                    {typeof link.stars === 'number' && (
+                    {typeof link.stars === 'number' && link.stars > 1 && (
                       <span className="flex items-center gap-1 text-muted-foreground ml-1">
                         <Star className="h-4 w-4 fill-current" />
                         {link.stars.toLocaleString()}
