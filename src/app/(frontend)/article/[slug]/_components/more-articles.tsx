@@ -21,7 +21,7 @@ export default async function MoreArticles({ currentArticleSlug }: { currentArti
   const recommendedArticles = articles.slice(0, 3)
 
   return (
-    <div className="mt-10">
+    <div className="mt-10 max-w-lg">
       <h4 className="uppercase text-sm text-muted-foreground font-semibold mb-4">More Articles</h4>
       <div className="flex flex-col gap-6">
         {recommendedArticles.map((article) => (

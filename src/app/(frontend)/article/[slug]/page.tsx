@@ -78,8 +78,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </div>
       <PageTitle>{article.title}</PageTitle>
 
-      <div className="lg:flex flex-row-reverse items-start gap-8">
-        <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-xl lg:max-w-none lg:mt-0 relative before:content-['/'] before:hidden before:lg:inline-block before:text-white before:mr-2 before:text-2xl before:xl:text-3xl">
+      <div className="xl:flex flex-row-reverse items-start gap-8">
+        <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-lg xl:max-w-none lg:mt-0 relative before:content-['/'] before:hidden before:lg:inline-block before:text-white before:mr-2 before:text-2xl before:xl:text-3xl">
           {article.excerpt}
         </Paragraph>
 

@@ -36,7 +36,7 @@ export default function ShareThis({ title, url }: ShareThisProps) {
     <>
       <Separator className="mb-4 mt-8" />
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4 xl:justify-between">
         <span className="text-muted-foreground text-sm">Share:</span>
         <div className="flex items-center gap-4">
           <button
