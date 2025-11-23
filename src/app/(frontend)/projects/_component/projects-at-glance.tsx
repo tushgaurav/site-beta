@@ -11,7 +11,7 @@ export default async function ProjectsAtGlance() {
   const projects = await payload.find({
     collection: 'projects',
     limit: 20,
-    sort: '-createdAt',
+    sort: '-updatedAt',
   })
 
   if (!projects.docs || projects.docs.length === 0) {
@@ -31,10 +31,10 @@ export default async function ProjectsAtGlance() {
           const imageUrl = projectImage?.url
 
           return (
-            <Link href={`/projects/${project.slug}`} key={project.id}>
+            <Link href={`/projects/${project.slug}`} key={project.id} className="group flex flex-col h-full">
               <div
                 key={project.id}
-                className="bg-card rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-card rounded-lg overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col"
               >
                 {imageUrl && (
                   <div className="relative w-full h-48">
@@ -42,7 +42,7 @@ export default async function ProjectsAtGlance() {
                       src={imageUrl}
                       alt={projectImage?.alt || project.title}
                       fill
-                      className="object-cover filter grayscale contrast-90 brightness-80 opacity-90 hover:grayscale-0 hover:opacity-100 hover:brightness-100 transition-all duration-300"
+                      className="object-cover filter grayscale-50 contrast-90 brightness-80 opacity-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:brightness-100 transition-all duration-300"
                     />
                   </div>
                 )}

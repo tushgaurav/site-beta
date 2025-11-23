@@ -26,11 +26,17 @@ export const Projects: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        disableListColumn: true,
+      }
     },
     {
       name: 'content',
       type: 'richText',
       required: true,
+      admin: {
+        disableListColumn: true,
+      }
     },
     {
       name: 'links',
