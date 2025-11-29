@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer>
       <Separator className="my-2" />
-      <div className="flex justify-between items-center p-4 limit-width text-muted-foreground text-sm">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 p-4 limit-width text-muted-foreground text-sm">
         <div className="flex justify-center items-center gap-4">
           <Link href="/resume" className="hover:text-primary transition-colors">
             Resume

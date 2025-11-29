@@ -79,7 +79,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <PageTitle>{article.title}</PageTitle>
 
       <div className="xl:flex flex-row-reverse items-start gap-8">
-        <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-lg xl:max-w-none lg:mt-0 relative before:content-['/'] before:hidden before:lg:inline-block before:text-white before:mr-2 before:text-2xl before:xl:text-3xl">
+        <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-lg xl:max-w-none lg:mt-0 relative before:content-['/'] before:hidden before:lg:inline-block before:mr-2 before:text-2xl before:xl:text-3xl">
           {article.excerpt}
         </Paragraph>
 
@@ -88,7 +88,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           alt={(article.featuredImage as Media)?.alt!}
           width={800}
           height={800}
-          className="rounded-lg max-w-2xl h-auto mb-4"
+          className="rounded-lg w-full xl:max-w-2xl h-auto mb-4"
         />
       </div>
 

@@ -139,7 +139,6 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-2">
-          <ModeToggle />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 hover:bg-accent rounded-md transition-colors"
@@ -164,6 +163,10 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <div className="mt-2 ml-2 gap-4 flex items-center">
+              <span className="text-muted-foreground text-sm">Color Scheme</span>
+              <ModeToggle />
+            </div>
           </div>
         </div>
       )}
