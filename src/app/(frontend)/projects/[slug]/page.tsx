@@ -7,6 +7,7 @@ import { Media } from '@/payload-types'
 import Image from 'next/image'
 import { Github, ExternalLink, Star } from 'lucide-react'
 import Link from 'next/link'
+import { absoluteUrl } from '@/lib/utils'
 
 async function getGithubStars(url: string) {
   const match = url.match(/github\.com\/([^/]+)\/([^/]+)/)
@@ -46,6 +47,30 @@ export async function generateMetadata({
   return {
     title: project.title,
     description: project.description,
+    openGraph: {
+      title: project.title,
+      description: project.description,
+      type: "website",
+      url: absoluteUrl(`/projects/${slug}`),
+      images: [
+        {
+          url: `/og?title=${encodeURIComponent(
+            project.title
+          )}&description=${encodeURIComponent(project.description!)}`
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.description!,
+      images: [
+        `/og?title=${encodeURIComponent(
+          project.title
+        )}&description=${encodeURIComponent(project.description!)}`
+      ],
+      creator: "@tushgaurav"
+    }
   }
 }
 

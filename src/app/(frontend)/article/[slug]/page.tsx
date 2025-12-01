@@ -12,6 +12,7 @@ import { Media } from '@/payload-types'
 import CopyMarkdown from './_components/copy-markdown'
 import { convertLexicalToMarkdown, editorConfigFactory } from '@payloadcms/richtext-lexical'
 import { DocsCopyPage } from '@/components/article-copy-page'
+import { absoluteUrl } from '@/lib/utils'
 
 export async function generateMetadata({
   params,
@@ -38,6 +39,30 @@ export async function generateMetadata({
   return {
     title: article.title,
     description: article.excerpt,
+    openGraph: {
+      title: article.title,
+      description: article.excerpt!,
+      type: "article",
+      url: absoluteUrl(`/article/${slug}`),
+      images: [
+        {
+          url: `/og?title=${encodeURIComponent(
+            article.title
+          )}&description=${encodeURIComponent(article.excerpt!)}`
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt!,
+      images: [
+        `/og?title=${encodeURIComponent(
+          article.title
+        )}&description=${encodeURIComponent(article.excerpt!)}`
+      ],
+      creator: "@tushgaurav"
+    }
   }
 }
 
