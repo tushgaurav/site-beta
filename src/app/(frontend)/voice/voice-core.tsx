@@ -6,6 +6,7 @@ import { RealtimeAgent, RealtimeSession } from '@openai/agents/realtime'
 import SYSTEM from './SYSTEM'
 import OrbVisualizer from './orb-visualizer'
 import { internetSearchTool } from './tools/internet-search'
+import { collectUserInfoTool } from './tools/collect-user-info'
 import { Button } from '@/components/ui/button'
 
 const INTENSITY = 3
@@ -140,7 +141,7 @@ export default function RealtimeVoice() {
                 agentRef.current = new RealtimeAgent({
                     name: 'Assistant',
                     instructions: SYSTEM,
-                    tools: [internetSearchTool],
+                    tools: [internetSearchTool, collectUserInfoTool],
                 })
             }
 

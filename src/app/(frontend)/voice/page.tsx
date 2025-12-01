@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Page, PageTitle } from '@/components/page'
+import { Page } from '@/components/page'
 import RealtimeVoice from './voice-core'
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Voice() {
 
     return (
-        <Page>
+        <Page className="flex flex-col items-center justify-center min-h-[calc(100vh-20rem)]">
             <RealtimeVoice />
         </Page>
     )
