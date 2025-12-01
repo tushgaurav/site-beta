@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator'
 import { Media } from '@/payload-types'
 import CopyMarkdown from './_components/copy-markdown'
 import { convertLexicalToMarkdown, editorConfigFactory } from '@payloadcms/richtext-lexical'
+import { DocsCopyPage } from '@/components/article-copy-page'
 
 export async function generateMetadata({
   params,
@@ -59,7 +60,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <Page>
-      <div className="flex items-center gap-2 lg:gap-4 mt-10">
+      <div className="flex items-center flex-wrap gap-2 lg:gap-4 mt-10">
         {article.tags?.map((tag) => (
           <Badge key={tag}>{tag}</Badge>
         ))}
@@ -74,6 +75,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <span className="mx-2 text-muted-foreground/40">|</span>
         <div className="text-muted-foreground text-sm font-semibold uppercase">
           {article.readingTime} min read
+        </div>
+
+        <div className="lg:ml-auto">
+          <DocsCopyPage url={`https://www.tushgaurav.com/article/${slug}`} />
         </div>
       </div>
       <PageTitle>{article.title}</PageTitle>
