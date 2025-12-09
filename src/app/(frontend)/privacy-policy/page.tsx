@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Page, PageTitle, Paragraph, Subtitle } from '@/components/page'
+import Hedgehog from '@/components/extras/hedgehog'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 export default function PrivacyPolicy() {
   return (
     <Page>
+      <Hedgehog />
       <PageTitle>Privacy Policy</PageTitle>
 
       <Paragraph>
