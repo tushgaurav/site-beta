@@ -3,16 +3,7 @@
 import { useRef, useState } from 'react'
 import { Pause, Play } from 'lucide-react'
 
-const BAR_COUNT = 56
 const PLAYBACK_RATES = [1, 1.25, 1.5, 2]
-
-// Deterministic pseudo-random bar heights (same on server and client),
-// giving the progress track a waveform feel without decoding the audio.
-function barHeight(index: number): number {
-  const x = Math.sin(index * 12.9898 + 78.233) * 43758.5453
-  const fract = x - Math.floor(x)
-  return 0.3 + 0.7 * fract
-}
 
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds)) return '--:--'
@@ -24,6 +15,7 @@ function formatTime(seconds: number): string {
 export default function ArticleAudioPlayer({ src, title }: { src: string; title: string }) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [playing, setPlaying] = useState(false)
+  const [started, setStarted] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(NaN)
   const [rateIndex, setRateIndex] = useState(0)
@@ -35,6 +27,7 @@ export default function ArticleAudioPlayer({ src, title }: { src: string; title:
     if (!audio) return
     if (audio.paused) {
       audio.play()
+      setStarted(true)
     } else {
       audio.pause()
     }
@@ -56,7 +49,7 @@ export default function ArticleAudioPlayer({ src, title }: { src: string; title:
   }
 
   return (
-    <div className="group flex items-center gap-4 rounded-lg border bg-card px-4 py-3 my-4">
+    <div className="my-4 flex h-8 items-center gap-3">
       <audio
         ref={audioRef}
         src={src}
@@ -71,57 +64,60 @@ export default function ArticleAudioPlayer({ src, title }: { src: string; title:
       <button
         onClick={togglePlay}
         aria-label={playing ? `Pause audio narration of ${title}` : `Listen to ${title}`}
-        className="flex size-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-105 active:scale-95"
+        className="text-muted-foreground hover:border-foreground hover:text-foreground flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors"
       >
         {playing ? (
-          <Pause size={16} fill="currentColor" strokeWidth={0} />
+          <Pause size={11} fill="currentColor" strokeWidth={0} />
         ) : (
-          <Play size={16} fill="currentColor" strokeWidth={0} className="translate-x-[1px]" />
+          <Play size={11} fill="currentColor" strokeWidth={0} className="translate-x-[1px]" />
         )}
       </button>
 
-      <div className="min-w-0 flex-1">
-        <div className="mb-1.5 flex items-baseline justify-between gap-2">
-          <span className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-            Listen to this article
-          </span>
-          <span className="text-muted-foreground text-xs tabular-nums">
+      {!started ? (
+        <button
+          onClick={togglePlay}
+          className="text-muted-foreground hover:text-foreground flex items-baseline gap-2 text-xs font-semibold tracking-wider uppercase transition-colors"
+        >
+          Listen to this article
+          <span className="text-muted-foreground/40 normal-case">&middot;</span>
+          <span className="tabular-nums">{formatTime(duration)}</span>
+        </button>
+      ) : (
+        <>
+          <div className="group relative flex h-full min-w-0 flex-1 items-center">
+            <div className="bg-muted-foreground/20 h-px w-full overflow-visible">
+              <div
+                className="bg-foreground relative h-px"
+                style={{ width: `${progress * 100}%` }}
+              >
+                <span className="bg-foreground absolute top-1/2 right-0 size-[5px] -translate-y-1/2 translate-x-1/2 rounded-full opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+              </div>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step="any"
+              value={progress}
+              onChange={(e) => seek(Number(e.target.value))}
+              aria-label="Seek audio narration"
+              className="absolute inset-0 w-full cursor-pointer opacity-0"
+            />
+          </div>
+
+          <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>
-        </div>
 
-        <div className="relative flex h-6 items-center" aria-hidden="false">
-          <div className="flex h-full w-full items-center gap-[2px]">
-            {Array.from({ length: BAR_COUNT }, (_, i) => (
-              <span
-                key={i}
-                className={`min-w-0 flex-1 rounded-full transition-colors duration-150 ${
-                  i / BAR_COUNT < progress ? 'bg-foreground' : 'bg-border'
-                }`}
-                style={{ height: `${barHeight(i) * 100}%` }}
-              />
-            ))}
-          </div>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step="any"
-            value={progress}
-            onChange={(e) => seek(Number(e.target.value))}
-            aria-label="Seek audio narration"
-            className="absolute inset-0 w-full cursor-pointer opacity-0"
-          />
-        </div>
-      </div>
-
-      <button
-        onClick={cycleRate}
-        aria-label={`Playback speed ${PLAYBACK_RATES[rateIndex]}x`}
-        className="text-muted-foreground hover:text-foreground shrink-0 rounded-md border px-2 py-1 text-xs font-semibold tabular-nums transition-colors"
-      >
-        {PLAYBACK_RATES[rateIndex]}&times;
-      </button>
+          <button
+            onClick={cycleRate}
+            aria-label={`Playback speed ${PLAYBACK_RATES[rateIndex]}x`}
+            className="text-muted-foreground hover:text-foreground shrink-0 text-xs font-semibold tabular-nums transition-colors"
+          >
+            {PLAYBACK_RATES[rateIndex]}&times;
+          </button>
+        </>
+      )}
     </div>
   )
 }
