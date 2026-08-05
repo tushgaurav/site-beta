@@ -1,6 +1,6 @@
 'use client'
 
-import { Highlight, themes } from 'prism-react-renderer'
+import { Highlight, type PrismTheme } from 'prism-react-renderer'
 import CopyButton from './CopyButton'
 
 type Props = {
@@ -9,53 +9,79 @@ type Props = {
   filename?: string
 }
 
+// Muted, near-monochrome palette driven by CSS variables so it follows the
+// site theme in both light and dark mode (see globals.css --code-* tokens).
+const quietTheme: PrismTheme = {
+  plain: {
+    color: 'var(--code-plain)',
+    backgroundColor: 'transparent',
+  },
+  styles: [
+    {
+      types: ['comment', 'prolog', 'doctype', 'cdata'],
+      style: { color: 'var(--code-comment)', fontStyle: 'italic' },
+    },
+    {
+      types: ['punctuation', 'operator'],
+      style: { color: 'var(--code-punctuation)' },
+    },
+    {
+      types: ['keyword', 'atrule', 'selector', 'important'],
+      style: { color: 'var(--code-keyword)' },
+    },
+    {
+      types: ['string', 'char', 'inserted', 'attr-value', 'regex', 'url'],
+      style: { color: 'var(--code-string)' },
+    },
+    {
+      types: ['function', 'class-name', 'tag', 'deleted'],
+      style: { color: 'var(--code-function)' },
+    },
+    {
+      types: ['number', 'boolean', 'constant', 'symbol', 'builtin', 'attr-name', 'property', 'variable'],
+      style: { color: 'var(--code-constant)' },
+    },
+  ],
+}
+
 export const Code: React.FC<Props> = ({ code, language = 'typescript', filename }) => {
   if (!code) return null
 
+  const label = filename || language
+
   return (
-    <div className="not-prose my-4 min-w-0 max-w-full">
-      {/* Header with filename and copy button */}
-      {(filename || language) && (
-        <div className="flex items-center justify-between bg-muted/50 border border-border rounded-t-lg px-4 py-2">
-          <div className="flex items-center gap-2">
-            {filename && (
-              <span className="text-sm font-mono text-foreground/80">{filename}</span>
-            )}
-            {!filename && language && (
-              <span className="text-xs text-muted-foreground uppercase">{language}</span>
-            )}
-          </div>
+    <figure className="not-prose group/code my-8 min-w-0 max-w-full overflow-hidden rounded-lg border border-border bg-card">
+      {label && (
+        <figcaption className="flex items-center justify-between gap-2 border-b border-border/60 py-1 pl-4 pr-1.5">
+          <span className="truncate font-mono text-xs text-muted-foreground">
+            {filename || <span className="lowercase">{language}</span>}
+          </span>
           <CopyButton code={code} />
-        </div>
+        </figcaption>
       )}
 
-      {/* Code block */}
-      <Highlight theme={themes.gruvboxMaterialDark} code={code} language={language}>
+      <Highlight theme={quietTheme} code={code.trimEnd()} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
-            className={`${className} max-w-full overflow-x-auto p-4 text-sm ${filename || language ? 'rounded-b-lg' : 'rounded-lg'} border border-border ${filename || language ? 'border-t-0' : ''}`}
+            className={`${className} relative max-w-full whitespace-pre-wrap break-words px-4 py-3.5 font-mono text-[0.8125rem] leading-relaxed [tab-size:2]`}
             style={style}
           >
-            {!filename && !language && (
-              <div className="absolute top-2 right-2">
+            {!label && (
+              <div className="absolute right-1.5 top-1.5">
                 <CopyButton code={code} />
               </div>
             )}
             {tokens.map((line, i) => (
-              <div key={i} {...getLineProps({ line, key: i })} className="table-row">
-                <span className="table-cell select-none text-right pr-4 text-muted-foreground/50">
-                  {i + 1}
-                </span>
-                <span className="table-cell">
-                  {line.map((token, key) => (
-                    <span key={key} {...getTokenProps({ token, key })} />
-                  ))}
-                </span>
-              </div>
+              <span key={i} {...getLineProps({ line })}>
+                {line.map((token, key) => (
+                  <span key={key} {...getTokenProps({ token })} />
+                ))}
+                {'\n'}
+              </span>
             ))}
           </pre>
         )}
       </Highlight>
-    </div>
+    </figure>
   )
 }

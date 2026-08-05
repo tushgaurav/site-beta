@@ -16,8 +16,14 @@ export default function CopyButton({ code }: { code: string }) {
   }
 
   return (
-    <Button variant="ghost" size="icon" onClick={handleCopy} className="h-8 w-8">
-      {copied ? <ClipboardCheck className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={handleCopy}
+      aria-label="Copy code"
+      className="h-7 w-7 text-muted-foreground/70 transition-colors hover:text-foreground"
+    >
+      {copied ? <ClipboardCheck className="h-3.5 w-3.5" /> : <CopyIcon className="h-3.5 w-3.5" />}
     </Button>
   )
 }
