@@ -2,6 +2,7 @@
 
 import { Highlight, type PrismTheme } from 'prism-react-renderer'
 import CopyButton from './CopyButton'
+import DownloadButton from './DownloadButton'
 
 type Props = {
   code: string
@@ -56,7 +57,10 @@ export const Code: React.FC<Props> = ({ code, language = 'typescript', filename 
           <span className="truncate font-mono text-xs text-muted-foreground">
             {filename || <span className="lowercase">{language}</span>}
           </span>
-          <CopyButton code={code} />
+          <div className="flex items-center">
+            <DownloadButton code={code} filename={filename} />
+            <CopyButton code={code} />
+          </div>
         </figcaption>
       )}
 
@@ -67,7 +71,8 @@ export const Code: React.FC<Props> = ({ code, language = 'typescript', filename 
             style={style}
           >
             {!label && (
-              <div className="absolute right-1.5 top-1.5">
+              <div className="absolute right-1.5 top-1.5 flex items-center">
+                <DownloadButton code={code} filename={filename} />
                 <CopyButton code={code} />
               </div>
             )}
