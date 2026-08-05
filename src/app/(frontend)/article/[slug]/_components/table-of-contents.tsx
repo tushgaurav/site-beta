@@ -42,20 +42,30 @@ function HeadingList({
   onNavigate?: () => void
 }) {
   return (
-    <ul className="flex flex-col gap-1.5 border-l border-border">
+    <ul className="flex flex-col gap-2">
       {headings.map((heading) => (
-        <li key={heading.id}>
+        <li key={heading.id} className={cn(heading.level === 3 && 'pl-2')}>
           <a
             href={`#${heading.id}`}
             onClick={onNavigate}
             className={cn(
-              'block -ml-px border-l py-0.5 text-sm leading-snug transition-colors',
-              heading.level === 3 ? 'pl-7' : 'pl-4',
+              'group flex items-baseline gap-2.5 text-sm leading-snug transition-colors',
               activeId === heading.id
-                ? 'border-primary font-medium text-foreground'
-                : 'border-transparent text-muted-foreground hover:text-foreground',
+                ? 'font-medium text-foreground'
+                : 'text-muted-foreground hover:text-foreground',
             )}
           >
+            <span
+              aria-hidden
+              className={cn(
+                'select-none text-lg leading-none transition-colors',
+                activeId === heading.id
+                  ? 'text-foreground'
+                  : 'text-muted-foreground/50 group-hover:text-foreground',
+              )}
+            >
+              •
+            </span>
             {heading.text}
           </a>
         </li>

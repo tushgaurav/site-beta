@@ -9,6 +9,18 @@ export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
 }
 
+/**
+ * Turns heading text into an anchor id. Used by both the heading renderer and
+ * the table-of-contents extractor — keep them in sync via this single helper.
+ */
+export function slugifyHeading(text: string) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+}
+
 export async function validateCaptchaToken(token: string) {
   const options = {
     method: 'POST',

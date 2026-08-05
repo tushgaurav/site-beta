@@ -1,19 +1,23 @@
 import { JSXConverters } from '@payloadcms/richtext-lexical/react'
 import { SerializedHeadingNode } from '@payloadcms/richtext-lexical'
 import type { ElementType } from 'react'
+import { slugifyHeading } from '@/lib/utils'
+
+// Reads text straight from the serialized Lexical nodes. The rendered JSX
+// children can't be used for this: the custom text converter wraps every text
+// node in a fragment, so none of them are plain strings.
+function nodeText(node: { text?: string; children?: unknown[] }): string {
+  if (typeof node.text === 'string') return node.text
+  return ((node.children ?? []) as { text?: string; children?: unknown[] }[])
+    .map(nodeText)
+    .join('')
+}
 
 export const headingConverter: JSXConverters<SerializedHeadingNode> = {
   heading: ({ node, nodesToJSX }) => {
     const children = nodesToJSX({ nodes: node.children })
 
-    const textContent = children
-      .map((child) => (typeof child === 'string' ? child : ''))
-      .join('')
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^a-z0-9-]/g, '')
-
-    const id = textContent || undefined
+    const id = slugifyHeading(nodeText(node as unknown as { children?: unknown[] })) || undefined
 
     const baseClasses = 'font-bold tracking-tight scroll-mt-24'
 
