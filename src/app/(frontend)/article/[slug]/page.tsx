@@ -12,6 +12,7 @@ import ShareThis from './_components/share-this'
 import { Separator } from '@/components/ui/separator'
 import { Media, User } from '@/payload-types'
 import CopyMarkdown from './_components/copy-markdown'
+import ArticleAudioPlayer from './_components/audio-player'
 import { convertLexicalToMarkdown, editorConfigFactory } from '@payloadcms/richtext-lexical'
 import { DocsCopyPage } from '@/components/article-copy-page'
 import { absoluteUrl } from '@/lib/utils'
@@ -146,6 +147,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const author = typeof article.author === 'object' ? (article.author as User) : null
   const featuredImage =
     typeof article.featuredImage === 'object' ? (article.featuredImage as Media | null) : null
+  const audioMedia = typeof article.audio === 'object' ? (article.audio as Media | null) : null
   const headings = extractHeadings(article.content)
   const showToc = headings.length >= 3
 
@@ -243,6 +245,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           By <span className="font-medium text-foreground">{author.name}</span>
         </p>
       )}
+
+      {audioMedia?.url && <ArticleAudioPlayer src={audioMedia.url} title={article.title} />}
 
       <div className="xl:flex flex-row-reverse items-start gap-8">
         <Paragraph className="mt-2 mb-4 text-muted-foreground text-lg max-w-lg xl:max-w-none lg:mt-0 relative before:content-['/'] before:hidden before:lg:inline-block before:mr-2 before:text-2xl before:xl:text-3xl">

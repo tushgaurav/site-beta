@@ -17,8 +17,8 @@ import {
   timestamp,
   serial,
   numeric,
-  jsonb,
   boolean,
+  jsonb,
   pgEnum,
 } from '@payloadcms/db-postgres/drizzle/pg-core'
 import { sql, relations } from '@payloadcms/db-postgres/drizzle'
@@ -38,6 +38,11 @@ export const enum__articles_v_version_categories = pgEnum('enum__articles_v_vers
   'tutorial',
 ])
 export const enum__articles_v_version_status = pgEnum('enum__articles_v_version_status', [
+  'draft',
+  'published',
+])
+export const enum_hobbies_status = pgEnum('enum_hobbies_status', ['draft', 'published'])
+export const enum__hobbies_v_version_status = pgEnum('enum__hobbies_v_version_status', [
   'draft',
   'published',
 ])
@@ -153,12 +158,23 @@ export const articles = pgTable(
       onDelete: 'set null',
     }),
     status: enum_articles_status('status').default('draft'),
+    isFeatured: boolean('is_featured').default(true),
+    unlisted: boolean('unlisted').default(false),
     publishedAt: timestamp('published_at', { mode: 'string', withTimezone: true, precision: 3 }),
     featuredImage: integer('featured_image_id').references(() => media.id, {
       onDelete: 'set null',
     }),
     excerpt: varchar('excerpt'),
     content: jsonb('content'),
+    audio: integer('audio_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
+    audioContentHash: varchar('audio_content_hash'),
+    audioGeneratedAt: timestamp('audio_generated_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }),
     readingTime: numeric('reading_time'),
     updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
       .defaultNow()
@@ -172,6 +188,7 @@ export const articles = pgTable(
     articles_slug_idx: uniqueIndex('articles_slug_idx').on(columns.slug),
     articles_author_idx: index('articles_author_idx').on(columns.author),
     articles_featured_image_idx: index('articles_featured_image_idx').on(columns.featuredImage),
+    articles_audio_idx: index('articles_audio_idx').on(columns.audio),
     articles_updated_at_idx: index('articles_updated_at_idx').on(columns.updatedAt),
     articles_created_at_idx: index('articles_created_at_idx').on(columns.createdAt),
     articles__status_idx: index('articles__status_idx').on(columns._status),
@@ -229,6 +246,8 @@ export const _articles_v = pgTable(
       onDelete: 'set null',
     }),
     version_status: enum__articles_v_version_status('version_status').default('draft'),
+    version_isFeatured: boolean('version_is_featured').default(true),
+    version_unlisted: boolean('version_unlisted').default(false),
     version_publishedAt: timestamp('version_published_at', {
       mode: 'string',
       withTimezone: true,
@@ -239,6 +258,15 @@ export const _articles_v = pgTable(
     }),
     version_excerpt: varchar('version_excerpt'),
     version_content: jsonb('version_content'),
+    version_audio: integer('version_audio_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
+    version_audioContentHash: varchar('version_audio_content_hash'),
+    version_audioGeneratedAt: timestamp('version_audio_generated_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }),
     version_readingTime: numeric('version_reading_time'),
     version_updatedAt: timestamp('version_updated_at', {
       mode: 'string',
@@ -270,6 +298,9 @@ export const _articles_v = pgTable(
     _articles_v_version_version_featured_image_idx: index(
       '_articles_v_version_version_featured_image_idx',
     ).on(columns.version_featuredImage),
+    _articles_v_version_version_audio_idx: index('_articles_v_version_version_audio_idx').on(
+      columns.version_audio,
+    ),
     _articles_v_version_version_updated_at_idx: index(
       '_articles_v_version_version_updated_at_idx',
     ).on(columns.version_updatedAt),
@@ -301,6 +332,188 @@ export const _articles_v_texts = pgTable(
       foreignColumns: [_articles_v.id],
       name: '_articles_v_texts_parent_fk',
     }).onDelete('cascade'),
+  }),
+)
+
+export const social_links = pgTable(
+  'social_links',
+  {
+    id: serial('id').primaryKey(),
+    platform: varchar('platform').notNull(),
+    url: varchar('url').notNull(),
+    'si-icon-name': varchar('si_icon_name'),
+    'icon-upload': integer('icon_upload_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
+    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+  },
+  (columns) => ({
+    social_links_icon_upload_idx: index('social_links_icon_upload_idx').on(columns['icon-upload']),
+    social_links_updated_at_idx: index('social_links_updated_at_idx').on(columns.updatedAt),
+    social_links_created_at_idx: index('social_links_created_at_idx').on(columns.createdAt),
+  }),
+)
+
+export const hobbies = pgTable(
+  'hobbies',
+  {
+    id: serial('id').primaryKey(),
+    title: varchar('title'),
+    slug: varchar('slug'),
+    status: enum_hobbies_status('status').default('draft'),
+    publishedAt: timestamp('published_at', { mode: 'string', withTimezone: true, precision: 3 }),
+    description: varchar('description'),
+    featuredImage: integer('featured_image_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
+    content: jsonb('content'),
+    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    _status: enum_hobbies_status('_status').default('draft'),
+  },
+  (columns) => ({
+    hobbies_slug_idx: uniqueIndex('hobbies_slug_idx').on(columns.slug),
+    hobbies_featured_image_idx: index('hobbies_featured_image_idx').on(columns.featuredImage),
+    hobbies_updated_at_idx: index('hobbies_updated_at_idx').on(columns.updatedAt),
+    hobbies_created_at_idx: index('hobbies_created_at_idx').on(columns.createdAt),
+    hobbies__status_idx: index('hobbies__status_idx').on(columns._status),
+  }),
+)
+
+export const _hobbies_v = pgTable(
+  '_hobbies_v',
+  {
+    id: serial('id').primaryKey(),
+    parent: integer('parent_id').references(() => hobbies.id, {
+      onDelete: 'set null',
+    }),
+    version_title: varchar('version_title'),
+    version_slug: varchar('version_slug'),
+    version_status: enum__hobbies_v_version_status('version_status').default('draft'),
+    version_publishedAt: timestamp('version_published_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }),
+    version_description: varchar('version_description'),
+    version_featuredImage: integer('version_featured_image_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
+    version_content: jsonb('version_content'),
+    version_updatedAt: timestamp('version_updated_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }),
+    version_createdAt: timestamp('version_created_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }),
+    version__status: enum__hobbies_v_version_status('version__status').default('draft'),
+    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    latest: boolean('latest'),
+  },
+  (columns) => ({
+    _hobbies_v_parent_idx: index('_hobbies_v_parent_idx').on(columns.parent),
+    _hobbies_v_version_version_slug_idx: index('_hobbies_v_version_version_slug_idx').on(
+      columns.version_slug,
+    ),
+    _hobbies_v_version_version_featured_image_idx: index(
+      '_hobbies_v_version_version_featured_image_idx',
+    ).on(columns.version_featuredImage),
+    _hobbies_v_version_version_updated_at_idx: index(
+      '_hobbies_v_version_version_updated_at_idx',
+    ).on(columns.version_updatedAt),
+    _hobbies_v_version_version_created_at_idx: index(
+      '_hobbies_v_version_version_created_at_idx',
+    ).on(columns.version_createdAt),
+    _hobbies_v_version_version__status_idx: index('_hobbies_v_version_version__status_idx').on(
+      columns.version__status,
+    ),
+    _hobbies_v_created_at_idx: index('_hobbies_v_created_at_idx').on(columns.createdAt),
+    _hobbies_v_updated_at_idx: index('_hobbies_v_updated_at_idx').on(columns.updatedAt),
+    _hobbies_v_latest_idx: index('_hobbies_v_latest_idx').on(columns.latest),
+  }),
+)
+
+export const contact_messages = pgTable(
+  'contact_messages',
+  {
+    id: serial('id').primaryKey(),
+    name: varchar('name').notNull(),
+    email: varchar('email').notNull(),
+    message: varchar('message').notNull(),
+    category: varchar('category').notNull(),
+    sendCopy: boolean('send_copy'),
+    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+  },
+  (columns) => ({
+    contact_messages_updated_at_idx: index('contact_messages_updated_at_idx').on(columns.updatedAt),
+  }),
+)
+
+export const projects_links = pgTable(
+  'projects_links',
+  {
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: varchar('id').primaryKey(),
+    url: varchar('url').notNull(),
+  },
+  (columns) => ({
+    _orderIdx: index('projects_links_order_idx').on(columns._order),
+    _parentIDIdx: index('projects_links_parent_id_idx').on(columns._parentID),
+    _parentIDFk: foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [projects.id],
+      name: 'projects_links_parent_id_fk',
+    }).onDelete('cascade'),
+  }),
+)
+
+export const projects = pgTable(
+  'projects',
+  {
+    id: serial('id').primaryKey(),
+    title: varchar('title').notNull(),
+    slug: varchar('slug').notNull(),
+    description: varchar('description').notNull(),
+    image: integer('image_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
+    content: jsonb('content').notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+  },
+  (columns) => ({
+    projects_slug_idx: uniqueIndex('projects_slug_idx').on(columns.slug),
+    projects_image_idx: index('projects_image_idx').on(columns.image),
+    projects_updated_at_idx: index('projects_updated_at_idx').on(columns.updatedAt),
+    projects_created_at_idx: index('projects_created_at_idx').on(columns.createdAt),
   }),
 )
 
@@ -339,6 +552,10 @@ export const payload_locked_documents_rels = pgTable(
     usersID: integer('users_id'),
     mediaID: integer('media_id'),
     articlesID: integer('articles_id'),
+    'social-linksID': integer('social_links_id'),
+    hobbiesID: integer('hobbies_id'),
+    'contact-messagesID': integer('contact_messages_id'),
+    projectsID: integer('projects_id'),
   },
   (columns) => ({
     order: index('payload_locked_documents_rels_order_idx').on(columns.order),
@@ -353,6 +570,18 @@ export const payload_locked_documents_rels = pgTable(
     payload_locked_documents_rels_articles_id_idx: index(
       'payload_locked_documents_rels_articles_id_idx',
     ).on(columns.articlesID),
+    payload_locked_documents_rels_social_links_id_idx: index(
+      'payload_locked_documents_rels_social_links_id_idx',
+    ).on(columns['social-linksID']),
+    payload_locked_documents_rels_hobbies_id_idx: index(
+      'payload_locked_documents_rels_hobbies_id_idx',
+    ).on(columns.hobbiesID),
+    payload_locked_documents_rels_contact_messages_id_idx: index(
+      'payload_locked_documents_rels_contact_messages_id_idx',
+    ).on(columns['contact-messagesID']),
+    payload_locked_documents_rels_projects_id_idx: index(
+      'payload_locked_documents_rels_projects_id_idx',
+    ).on(columns.projectsID),
     parentFk: foreignKey({
       columns: [columns['parent']],
       foreignColumns: [payload_locked_documents.id],
@@ -372,6 +601,26 @@ export const payload_locked_documents_rels = pgTable(
       columns: [columns['articlesID']],
       foreignColumns: [articles.id],
       name: 'payload_locked_documents_rels_articles_fk',
+    }).onDelete('cascade'),
+    'social-linksIdFk': foreignKey({
+      columns: [columns['social-linksID']],
+      foreignColumns: [social_links.id],
+      name: 'payload_locked_documents_rels_social_links_fk',
+    }).onDelete('cascade'),
+    hobbiesIdFk: foreignKey({
+      columns: [columns['hobbiesID']],
+      foreignColumns: [hobbies.id],
+      name: 'payload_locked_documents_rels_hobbies_fk',
+    }).onDelete('cascade'),
+    'contact-messagesIdFk': foreignKey({
+      columns: [columns['contact-messagesID']],
+      foreignColumns: [contact_messages.id],
+      name: 'payload_locked_documents_rels_contact_messages_fk',
+    }).onDelete('cascade'),
+    projectsIdFk: foreignKey({
+      columns: [columns['projectsID']],
+      foreignColumns: [projects.id],
+      name: 'payload_locked_documents_rels_projects_fk',
     }).onDelete('cascade'),
   }),
 )
@@ -452,9 +701,27 @@ export const payload_migrations = pgTable(
   }),
 )
 
+export const homepage_hero_title = pgTable(
+  'homepage_hero_title',
+  {
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: varchar('id').primaryKey(),
+    title: varchar('title').notNull(),
+  },
+  (columns) => ({
+    _orderIdx: index('homepage_hero_title_order_idx').on(columns._order),
+    _parentIDIdx: index('homepage_hero_title_parent_id_idx').on(columns._parentID),
+    _parentIDFk: foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [homepage.id],
+      name: 'homepage_hero_title_parent_id_fk',
+    }).onDelete('cascade'),
+  }),
+)
+
 export const homepage = pgTable('homepage', {
   id: serial('id').primaryKey(),
-  heroTitle: varchar('hero_title').notNull(),
   bio: varchar('bio'),
   updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 }),
   createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 }),
@@ -487,21 +754,81 @@ export const homepage_rels = pgTable(
   }),
 )
 
-export const about = pgTable(
-  'about',
+export const about_mission_missions = pgTable(
+  'about_mission_missions',
   {
-    id: serial('id').primaryKey(),
-    content: jsonb('content').notNull(),
-    profileImage: integer('profile_image_id').references(() => media.id, {
-      onDelete: 'set null',
-    }),
-    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 }),
-    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 }),
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: varchar('id').primaryKey(),
+    mission: varchar('mission').notNull(),
   },
   (columns) => ({
-    about_profile_image_idx: index('about_profile_image_idx').on(columns.profileImage),
+    _orderIdx: index('about_mission_missions_order_idx').on(columns._order),
+    _parentIDIdx: index('about_mission_missions_parent_id_idx').on(columns._parentID),
+    _parentIDFk: foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [about.id],
+      name: 'about_mission_missions_parent_id_fk',
+    }).onDelete('cascade'),
   }),
 )
+
+export const about_beliefs_beliefs_list = pgTable(
+  'about_beliefs_beliefs_list',
+  {
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: varchar('id').primaryKey(),
+    belief: varchar('belief').notNull(),
+  },
+  (columns) => ({
+    _orderIdx: index('about_beliefs_beliefs_list_order_idx').on(columns._order),
+    _parentIDIdx: index('about_beliefs_beliefs_list_parent_id_idx').on(columns._parentID),
+    _parentIDFk: foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [about.id],
+      name: 'about_beliefs_beliefs_list_parent_id_fk',
+    }).onDelete('cascade'),
+  }),
+)
+
+export const about_wisdom = pgTable(
+  'about_wisdom',
+  {
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: varchar('id').primaryKey(),
+    quote: varchar('quote').notNull(),
+  },
+  (columns) => ({
+    _orderIdx: index('about_wisdom_order_idx').on(columns._order),
+    _parentIDIdx: index('about_wisdom_parent_id_idx').on(columns._parentID),
+    _parentIDFk: foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [about.id],
+      name: 'about_wisdom_parent_id_fk',
+    }).onDelete('cascade'),
+  }),
+)
+
+export const about = pgTable('about', {
+  id: serial('id').primaryKey(),
+  hero_title: varchar('hero_title').notNull().default("Hi, I'm Tushar Gaurav."),
+  hero_tagline: varchar('hero_tagline').notNull(),
+  history_heading: varchar('history_heading').notNull().default('From Dhanbad to Dev'),
+  history_content: jsonb('history_content').notNull(),
+  mission_heading: varchar('mission_heading').notNull().default("What I'm Building Toward"),
+  mission_currentFocus: jsonb('mission_current_focus'),
+  realTalk_heading: varchar('real_talk_heading')
+    .notNull()
+    .default("Things I'm Working On (The Human Stuff)"),
+  realTalk_content: jsonb('real_talk_content').notNull(),
+  beliefs_heading: varchar('beliefs_heading').notNull().default('Ideas Worth Sharing'),
+  interests_heading: varchar('interests_heading').notNull().default('The Other Stuff'),
+  interests_content: jsonb('interests_content').notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 }),
+  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 }),
+})
 
 export const relations_users_sessions = relations(users_sessions, ({ one }) => ({
   _parentID: one(users, {
@@ -544,6 +871,11 @@ export const relations_articles = relations(articles, ({ one, many }) => ({
   categories: many(articles_categories, {
     relationName: 'categories',
   }),
+  audio: one(media, {
+    fields: [articles.audio],
+    references: [media.id],
+    relationName: 'audio',
+  }),
   _texts: many(articles_texts, {
     relationName: '_texts',
   }),
@@ -584,8 +916,57 @@ export const relations__articles_v = relations(_articles_v, ({ one, many }) => (
   version_categories: many(_articles_v_version_categories, {
     relationName: 'version_categories',
   }),
+  version_audio: one(media, {
+    fields: [_articles_v.version_audio],
+    references: [media.id],
+    relationName: 'version_audio',
+  }),
   _texts: many(_articles_v_texts, {
     relationName: '_texts',
+  }),
+}))
+export const relations_social_links = relations(social_links, ({ one }) => ({
+  'icon-upload': one(media, {
+    fields: [social_links['icon-upload']],
+    references: [media.id],
+    relationName: 'icon-upload',
+  }),
+}))
+export const relations_hobbies = relations(hobbies, ({ one }) => ({
+  featuredImage: one(media, {
+    fields: [hobbies.featuredImage],
+    references: [media.id],
+    relationName: 'featuredImage',
+  }),
+}))
+export const relations__hobbies_v = relations(_hobbies_v, ({ one }) => ({
+  parent: one(hobbies, {
+    fields: [_hobbies_v.parent],
+    references: [hobbies.id],
+    relationName: 'parent',
+  }),
+  version_featuredImage: one(media, {
+    fields: [_hobbies_v.version_featuredImage],
+    references: [media.id],
+    relationName: 'version_featuredImage',
+  }),
+}))
+export const relations_contact_messages = relations(contact_messages, () => ({}))
+export const relations_projects_links = relations(projects_links, ({ one }) => ({
+  _parentID: one(projects, {
+    fields: [projects_links._parentID],
+    references: [projects.id],
+    relationName: 'links',
+  }),
+}))
+export const relations_projects = relations(projects, ({ one, many }) => ({
+  image: one(media, {
+    fields: [projects.image],
+    references: [media.id],
+    relationName: 'image',
+  }),
+  links: many(projects_links, {
+    relationName: 'links',
   }),
 }))
 export const relations_payload_locked_documents_rels = relations(
@@ -610,6 +991,26 @@ export const relations_payload_locked_documents_rels = relations(
       fields: [payload_locked_documents_rels.articlesID],
       references: [articles.id],
       relationName: 'articles',
+    }),
+    'social-linksID': one(social_links, {
+      fields: [payload_locked_documents_rels['social-linksID']],
+      references: [social_links.id],
+      relationName: 'social-links',
+    }),
+    hobbiesID: one(hobbies, {
+      fields: [payload_locked_documents_rels.hobbiesID],
+      references: [hobbies.id],
+      relationName: 'hobbies',
+    }),
+    'contact-messagesID': one(contact_messages, {
+      fields: [payload_locked_documents_rels['contact-messagesID']],
+      references: [contact_messages.id],
+      relationName: 'contact-messages',
+    }),
+    projectsID: one(projects, {
+      fields: [payload_locked_documents_rels.projectsID],
+      references: [projects.id],
+      relationName: 'projects',
     }),
   }),
 )
@@ -642,6 +1043,13 @@ export const relations_payload_preferences = relations(payload_preferences, ({ m
   }),
 }))
 export const relations_payload_migrations = relations(payload_migrations, () => ({}))
+export const relations_homepage_hero_title = relations(homepage_hero_title, ({ one }) => ({
+  _parentID: one(homepage, {
+    fields: [homepage_hero_title._parentID],
+    references: [homepage.id],
+    relationName: 'heroTitle',
+  }),
+}))
 export const relations_homepage_rels = relations(homepage_rels, ({ one }) => ({
   parent: one(homepage, {
     fields: [homepage_rels.parent],
@@ -655,15 +1063,46 @@ export const relations_homepage_rels = relations(homepage_rels, ({ one }) => ({
   }),
 }))
 export const relations_homepage = relations(homepage, ({ many }) => ({
+  heroTitle: many(homepage_hero_title, {
+    relationName: 'heroTitle',
+  }),
   _rels: many(homepage_rels, {
     relationName: '_rels',
   }),
 }))
-export const relations_about = relations(about, ({ one }) => ({
-  profileImage: one(media, {
-    fields: [about.profileImage],
-    references: [media.id],
-    relationName: 'profileImage',
+export const relations_about_mission_missions = relations(about_mission_missions, ({ one }) => ({
+  _parentID: one(about, {
+    fields: [about_mission_missions._parentID],
+    references: [about.id],
+    relationName: 'mission_missions',
+  }),
+}))
+export const relations_about_beliefs_beliefs_list = relations(
+  about_beliefs_beliefs_list,
+  ({ one }) => ({
+    _parentID: one(about, {
+      fields: [about_beliefs_beliefs_list._parentID],
+      references: [about.id],
+      relationName: 'beliefs_beliefsList',
+    }),
+  }),
+)
+export const relations_about_wisdom = relations(about_wisdom, ({ one }) => ({
+  _parentID: one(about, {
+    fields: [about_wisdom._parentID],
+    references: [about.id],
+    relationName: 'wisdom',
+  }),
+}))
+export const relations_about = relations(about, ({ many }) => ({
+  mission_missions: many(about_mission_missions, {
+    relationName: 'mission_missions',
+  }),
+  beliefs_beliefsList: many(about_beliefs_beliefs_list, {
+    relationName: 'beliefs_beliefsList',
+  }),
+  wisdom: many(about_wisdom, {
+    relationName: 'wisdom',
   }),
 }))
 
@@ -672,6 +1111,8 @@ type DatabaseSchema = {
   enum_articles_status: typeof enum_articles_status
   enum__articles_v_version_categories: typeof enum__articles_v_version_categories
   enum__articles_v_version_status: typeof enum__articles_v_version_status
+  enum_hobbies_status: typeof enum_hobbies_status
+  enum__hobbies_v_version_status: typeof enum__hobbies_v_version_status
   users_sessions: typeof users_sessions
   users: typeof users
   media: typeof media
@@ -681,13 +1122,23 @@ type DatabaseSchema = {
   _articles_v_version_categories: typeof _articles_v_version_categories
   _articles_v: typeof _articles_v
   _articles_v_texts: typeof _articles_v_texts
+  social_links: typeof social_links
+  hobbies: typeof hobbies
+  _hobbies_v: typeof _hobbies_v
+  contact_messages: typeof contact_messages
+  projects_links: typeof projects_links
+  projects: typeof projects
   payload_locked_documents: typeof payload_locked_documents
   payload_locked_documents_rels: typeof payload_locked_documents_rels
   payload_preferences: typeof payload_preferences
   payload_preferences_rels: typeof payload_preferences_rels
   payload_migrations: typeof payload_migrations
+  homepage_hero_title: typeof homepage_hero_title
   homepage: typeof homepage
   homepage_rels: typeof homepage_rels
+  about_mission_missions: typeof about_mission_missions
+  about_beliefs_beliefs_list: typeof about_beliefs_beliefs_list
+  about_wisdom: typeof about_wisdom
   about: typeof about
   relations_users_sessions: typeof relations_users_sessions
   relations_users: typeof relations_users
@@ -698,13 +1149,23 @@ type DatabaseSchema = {
   relations__articles_v_version_categories: typeof relations__articles_v_version_categories
   relations__articles_v_texts: typeof relations__articles_v_texts
   relations__articles_v: typeof relations__articles_v
+  relations_social_links: typeof relations_social_links
+  relations_hobbies: typeof relations_hobbies
+  relations__hobbies_v: typeof relations__hobbies_v
+  relations_contact_messages: typeof relations_contact_messages
+  relations_projects_links: typeof relations_projects_links
+  relations_projects: typeof relations_projects
   relations_payload_locked_documents_rels: typeof relations_payload_locked_documents_rels
   relations_payload_locked_documents: typeof relations_payload_locked_documents
   relations_payload_preferences_rels: typeof relations_payload_preferences_rels
   relations_payload_preferences: typeof relations_payload_preferences
   relations_payload_migrations: typeof relations_payload_migrations
+  relations_homepage_hero_title: typeof relations_homepage_hero_title
   relations_homepage_rels: typeof relations_homepage_rels
   relations_homepage: typeof relations_homepage
+  relations_about_mission_missions: typeof relations_about_mission_missions
+  relations_about_beliefs_beliefs_list: typeof relations_about_beliefs_beliefs_list
+  relations_about_wisdom: typeof relations_about_wisdom
   relations_about: typeof relations_about
 }
 

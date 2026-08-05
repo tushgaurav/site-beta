@@ -212,6 +212,12 @@ export interface Article {
    */
   tags?: string[] | null;
   /**
+   * Generated audio version of this article
+   */
+  audio?: (number | null) | Media;
+  audioContentHash?: string | null;
+  audioGeneratedAt?: string | null;
+  /**
    * Estimated reading time in minutes
    */
   readingTime?: number | null;
@@ -446,6 +452,9 @@ export interface ArticlesSelect<T extends boolean = true> {
   content?: T;
   categories?: T;
   tags?: T;
+  audio?: T;
+  audioContentHash?: T;
+  audioGeneratedAt?: T;
   readingTime?: T;
   updatedAt?: T;
   createdAt?: T;

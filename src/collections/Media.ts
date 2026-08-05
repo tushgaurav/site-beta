@@ -13,6 +13,6 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    mimeTypes: ['image/*', 'video/mp4', 'video/webm', 'video/quicktime'],
+    mimeTypes: ['image/*', 'video/mp4', 'video/webm', 'video/quicktime', 'audio/mpeg'],
   },
 }

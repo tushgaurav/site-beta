@@ -182,6 +182,42 @@ export const Articles: CollectionConfig = {
       },
     },
     {
+      name: 'audio',
+      label: 'Audio Narration',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        position: 'sidebar',
+        description: 'Generated audio version of this article',
+      },
+    },
+    {
+      name: 'generateAudio',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: 'src/components/admin/GenerateAudioButton.tsx#GenerateAudioButton',
+        },
+      },
+    },
+    {
+      // SHA-256 of the article content at the time audio was generated,
+      // used to detect when the narration has gone stale.
+      name: 'audioContentHash',
+      type: 'text',
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: 'audioGeneratedAt',
+      type: 'date',
+      admin: {
+        hidden: true,
+      },
+    },
+    {
       name: 'readingTime',
       type: 'number',
       admin: {
