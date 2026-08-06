@@ -16,6 +16,7 @@ import { SocialLinks } from './collections/Social'
 import { homepage, about } from './globals/site'
 import { ContactMessages } from './collections/Contact'
 import { Projects } from './collections/Projects'
+import { Quotes } from './collections/Quotes'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,7 +37,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Media, Articles, SocialLinks, Hobbies, ContactMessages, Projects],
+  collections: [Users, Media, Articles, SocialLinks, Hobbies, ContactMessages, Projects, Quotes],
   globals: [homepage, about],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET!,

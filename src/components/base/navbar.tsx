@@ -60,12 +60,18 @@ const exclusivesLinks = [
     description:
       'Voice-enabled AI assistant for natural conversations about code, projects, or life.',
   },
+  {
+    title: 'Quotes',
+    href: '/quotes',
+    description: 'A collection of words worth keeping, served one at a time.',
+  },
 ]
 
 const mobileNavLinks = [
   { href: '/writing', label: 'Writing' },
   { href: '/voice', label: 'Voice' },
   { href: '/archive', label: 'Archive' },
+  { href: '/quotes', label: 'Quotes' },
   { href: '/work/companies', label: 'Companies' },
   { href: '/projects', label: 'Projects' },
   { href: '/work/hobbies', label: 'Hobbies' },
