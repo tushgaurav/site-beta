@@ -65,9 +65,11 @@ export default function QuoteDisplay({ quotes }: { quotes: QuoteItem[] }) {
             >
               {current.quote}
             </blockquote>
-            <figcaption className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-700 motion-safe:delay-150 motion-safe:fill-mode-both mt-8 text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              &mdash;&nbsp;{current.author ?? 'Unknown'}
-            </figcaption>
+            {current.author && (
+              <figcaption className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-700 motion-safe:delay-150 motion-safe:fill-mode-both mt-8 text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                &mdash;&nbsp;{current.author}
+              </figcaption>
+            )}
           </figure>
         )}
       </div>
